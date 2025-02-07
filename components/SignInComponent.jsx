@@ -1,5 +1,4 @@
 "use client";
-
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -21,7 +20,7 @@ const formSchema = z.object({
   password: z.string(),
 });
 
-const SignIn = ({ type }) => {
+const SignInComponent = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,13 +29,21 @@ const SignIn = ({ type }) => {
     },
   });
 
-  function onSubmit(values) {
-    console.log(values);
+  async function onSubmit(values) {
+    const resp = await fetch("http://localhost:8000/api/users/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+    const data = await resp.json();
+    localStorage.setItem("user", data.name);
   }
 
   return (
     <div className="p-6 border rounded-2xl">
-      <h1 className="font-medium mb-5 text-center">Sign In as {type}</h1>
+      <h1 className="font-medium mb-5 text-center">Sign In</h1>
       <Form {...form} className="">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -72,7 +79,7 @@ const SignIn = ({ type }) => {
           <p className="text-sm">
             Need Account?{" "}
             <Link
-              href="/user/manager/sign-up"
+              href="/user/sign-up"
               className="text-gray-400 hover:underline"
             >
               Sign Up
@@ -84,4 +91,4 @@ const SignIn = ({ type }) => {
     </div>
   );
 };
-export default SignIn;
+export default SignInComponent;

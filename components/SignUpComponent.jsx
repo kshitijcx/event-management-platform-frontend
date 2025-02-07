@@ -20,7 +20,7 @@ const formSchema = z.object({
   password: z.string(),
 });
 
-const SignUp = ({ type }) => {
+const SignUpComponent = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,10 +36,10 @@ const SignUp = ({ type }) => {
 
   return (
     <div className="p-6 border rounded-2xl">
-      <h1 className="font-medium mb-5 text-center">Sign In as {type}</h1>
+      <h1 className="font-medium mb-5 text-center">Sign Up</h1>
       <Form {...form} className="">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
+          <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
@@ -51,6 +51,7 @@ const SignUp = ({ type }) => {
                 <FormMessage />
               </FormItem>
             )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -87,4 +88,4 @@ const SignUp = ({ type }) => {
     </div>
   );
 };
-export default SignUp;
+export default SignUpComponent;

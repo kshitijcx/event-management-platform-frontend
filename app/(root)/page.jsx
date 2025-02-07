@@ -1,6 +1,15 @@
+"use client"
+import EventCard from "@/components/EventCard";
+import Options from "@/components/Options";
+
 const page = () => {
+  const name = localStorage.getItem('user')
   return (
-    <div>page</div>
-  )
-}
-export default page
+    <div className="p-6">
+      <h1 className="font-bold text-lg mb-3">Welcome! {name}</h1>
+      <Options />
+      <EventCard />
+    </div>
+  );
+};
+export default page;
