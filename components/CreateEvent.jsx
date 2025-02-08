@@ -28,32 +28,47 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-import { Card, CardContent, CardHeader } from "./ui/card";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string(),
+  title: z.string(),
   description: z.string(),
   category: z.string(),
   date: z.date(),
   attendeesLimit: z.string(),
 });
 
-const CreateEvent = () => {
+const CreateEvent = ({ userId }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      title: "",
       description: "",
       category: "",
-      date: "",
+      date: new Date(),
       attendeesLimit: "",
     },
   });
 
-  function onSubmit(values) {
-    const formattedDate = format(values.date, "dd-MM-yyyy");
-    values.date = formattedDate;
-    console.log(values);
+  const router = useRouter();
+
+  async function onSubmit(values) {
+    // const formattedDate = format(values.date, "dd-MM-yyyy");
+    // values["date"] = formattedDate;
+    values["userId"] = userId;
+    const resp = await fetch("http://localhost:8000/api/events/add", {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+    if (!resp.ok) {
+      console.log(resp);
+    } else {
+      console.log(values);
+      router.push("/");
+    }
   }
 
   return (
@@ -63,7 +78,7 @@ const CreateEvent = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="name"
+            name="title"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Event Name</FormLabel>

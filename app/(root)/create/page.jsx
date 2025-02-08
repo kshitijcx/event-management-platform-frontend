@@ -28,7 +28,7 @@ const Create = () => {
   }
   return (
     <div className="p-6">
-      <CreateEvent />
+      <CreateEvent userId={userId} />
     </div>
   );
 };
