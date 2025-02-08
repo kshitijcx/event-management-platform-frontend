@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import useStore from "@/store/userStore";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -29,6 +31,9 @@ const SignInComponent = () => {
     },
   });
 
+  const { setUser } = useStore();
+  const router = useRouter();
+
   async function onSubmit(values) {
     const resp = await fetch("http://localhost:8000/api/users/signin", {
       method: "POST",
@@ -38,7 +43,8 @@ const SignInComponent = () => {
       body: JSON.stringify(values),
     });
     const data = await resp.json();
-    localStorage.setItem("user", data.name);
+    setUser(data.id, data.token, data.name);
+    router.push("/");
   }
 
   return (

@@ -5,7 +5,7 @@ import Options from "@/components/Options";
 const page = () => {
   const name = localStorage.getItem('user')
   return (
-    <div className="p-6">
+    <div>
       <h1 className="font-bold text-lg mb-3">Welcome! {name}</h1>
       <Options />
       <EventCard />
