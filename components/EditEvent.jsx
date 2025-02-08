@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { format, formatDate } from "date-fns";
+import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -38,15 +38,15 @@ const formSchema = z.object({
   attendeesLimit: z.string().min(1),
 });
 
-const CreateEvent = ({ userId }) => {
+const EditEvent = ({ userId, event }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      category: "",
-      date: new Date(),
-      attendeesLimit: "",
+      title: event.title,
+      description: event.description,
+      category: event.category,
+      date: new Date(event.date),
+      attendeesLimit: String(event.attendeesLimit),
     },
   });
 
@@ -185,4 +185,4 @@ const CreateEvent = ({ userId }) => {
     </div>
   );
 };
-export default CreateEvent;
+export default EditEvent;
