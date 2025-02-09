@@ -20,9 +20,11 @@ const Edit = ({ params }) => {
   const { id } = use(params);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["EventToEdit"],
+    queryKey: ["EventToEdit",id],
     queryFn: () => fetchEvent(id),
+    enabled: !!userToken,
   });
+  console.log(data)
 
   useEffect(() => {
     const getUserToken = () => {
