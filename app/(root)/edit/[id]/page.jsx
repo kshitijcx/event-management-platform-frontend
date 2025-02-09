@@ -31,6 +31,11 @@ const Edit = ({ params }) => {
         router.push("/user");
       }
       if (userToken) {
+        if (userToken === "guest") {
+          router.push("/");
+        }
+        setLoading(false);
+      } else {
         setLoading(false);
       }
     };

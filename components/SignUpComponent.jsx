@@ -13,6 +13,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import useStore from "@/store/userStore";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string(),
@@ -21,6 +23,9 @@ const formSchema = z.object({
 });
 
 const SignUpComponent = () => {
+  const { setUser } = useStore();
+  const router = useRouter()
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,8 +35,17 @@ const SignUpComponent = () => {
     },
   });
 
-  function onSubmit(values) {
-    console.log(values);
+  async function onSubmit(values) {
+    const resp = await fetch("http://localhost:8000/api/users/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+    const data = await resp.json();
+    setUser(data.id, data.token, data.name);
+    router.push("/");
   }
 
   return (

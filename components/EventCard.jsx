@@ -9,14 +9,42 @@ import {
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
 import { format } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useStore from "@/store/userStore";
 import Link from "next/link";
+
+import { io } from "socket.io-client";
+import _ from "lodash";
+
+const socket = io("http://localhost:8000");
 
 const EventCard = ({ item, refetch }) => {
   const { userId } = useStore();
 
-  const [attendees, setAttendees] = useState(0);
+  const debounceUpdate = _.debounce((eventId, inc) => {
+    if (inc) {
+      socket.emit("inc", eventId);
+    } else {
+      socket.emit("dec", eventId);
+    }
+  }, 500);
+
+  const handleInc = () => {
+    debounceUpdate(item._id, true);
+  };
+  const handleDec = () => {
+    debounceUpdate(item._id, false);
+  };
+
+  useEffect(() => {
+    socket.on("attendeeCountUpdated", () => {
+      refetch();
+    });
+
+    return () => {
+      socket.off("attendeeCountUpdated");
+    };
+  }, [item._id]);
 
   const handleDelete = async (id, postUserId) => {
     const data = { userId: userId, postUserId: postUserId };
@@ -47,13 +75,27 @@ const EventCard = ({ item, refetch }) => {
 
             <div className="flex items-center gap-2">
               <p>Attendees: </p>
-              <Button className="rounded-full" size="sm" variant="ghost">
+              <Button
+                className="rounded-full"
+                size="sm"
+                variant="ghost"
+                onClick={handleDec}
+                disabled={item.attendees === 0 || userId !== item.userId}
+              >
                 <Minus />
               </Button>
               <p>
-                {attendees}/{item.attendeesLimit}
+                {item.attendees}/{item.attendeesLimit}
               </p>
-              <Button className="rounded-full" size="sm" variant="ghost">
+              <Button
+                className="rounded-full"
+                size="sm"
+                variant="ghost"
+                onClick={handleInc}
+                disabled={
+                  item.attendees === item.attendeesLimit || userId !== item.userId
+                }
+              >
                 <Plus />
               </Button>
             </div>
@@ -65,11 +107,12 @@ const EventCard = ({ item, refetch }) => {
           <Button
             variant="destructive"
             className="w-16"
+            disabled={item.userId !== userId}
             onClick={() => handleDelete(item._id, item.userId)}
           >
             Delete
           </Button>
-          <Button className="w-16" asChild>
+          <Button className="w-16" disabled={item.userId !== userId}>
             <Link href={`/edit/${item._id}`}>Edit</Link>
           </Button>
         </CardFooter>

@@ -9,7 +9,7 @@ import { PlusCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
-const Options = () => {
+const Options = ({ userType }) => {
   const months = [
     "Jan",
     "Feb",
@@ -62,14 +62,16 @@ const Options = () => {
         </Select>
       </div>
 
-      <div className="flex max-md:flex-col gap-3">
-        <Button asChild>
-          <Link href="/create">
-            Create Event <PlusCircle />
-          </Link>
-        </Button>
-        <Button variant="destructive">Logout</Button>
-      </div>
+      {userType !== "guest" && (
+        <div className="flex max-md:flex-col gap-3">
+          <Button asChild>
+            <Link href="/create">
+              Create Event <PlusCircle />
+            </Link>
+          </Button>
+          <Button variant="destructive">Logout</Button>
+        </div>
+      )}
     </div>
   );
 };

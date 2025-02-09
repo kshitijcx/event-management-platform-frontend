@@ -13,7 +13,6 @@ async function getEvents() {
     console.log(error);
   }
   const data = await resp.json();
-  console.log(data);
   return data;
 }
 
@@ -25,18 +24,19 @@ const page = () => {
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["events"],
     queryFn: getEvents,
+    enabled: !!userToken,
   });
-
-  console.log(data);
 
   useEffect(() => {
     const getUserToken = () => {
-      if (!loading && !userToken) {
-        setLoading(false);
-        router.push("/user");
-      }
       if (userToken) {
         setLoading(false);
+      } else {
+        setLoading(false);
+      }
+      if (!userToken && !loading) {
+        setLoading(false);
+        router.push("/user");
       }
     };
     getUserToken();
@@ -48,12 +48,21 @@ const page = () => {
 
   return (
     <div className="p-6">
-      <h1 className="font-bold text-lg mb-3">Welcome! {userName}</h1>
-      <Options />
+      <h1 className="font-bold text-lg mb-3">
+        Welcome! {userName ? userName : "Guest"}
+      </h1>
+      {!loading && <Options userType={userToken} />}
       {isLoading && <Loader2 className="animate-spin mx-auto mt-32" />}
       <div className="mx-auto flex flex-wrap gap-4 mt-4 max-md:flex-col items-center">
         {!isLoading &&
-          data.map((item) => <EventCard key={item._id} item={item} refetch={refetch} />)}
+          data?.map((item) => (
+            <EventCard
+              key={item._id}
+              item={item}
+              refetch={refetch}
+              userType={userToken}
+            />
+          ))}
       </div>
     </div>
   );
