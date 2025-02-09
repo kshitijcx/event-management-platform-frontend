@@ -36,7 +36,7 @@ const SignUpComponent = () => {
   });
 
   async function onSubmit(values) {
-    const resp = await fetch("http://localhost:8000/api/users/signup", {
+    const resp = await fetch("https://event-management-platform-backend-moar.onrender.com/api/users/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

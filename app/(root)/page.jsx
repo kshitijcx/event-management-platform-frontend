@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 async function getEvents() {
-  const resp = await fetch("http://localhost:8000/api/events/all");
+  const resp = await fetch("https://event-management-platform-backend-moar.onrender.com/api/events/all");
   if (!resp.ok) {
     console.log(error);
   }

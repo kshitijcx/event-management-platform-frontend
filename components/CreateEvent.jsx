@@ -54,7 +54,7 @@ const CreateEvent = ({ userId }) => {
 
   async function onSubmit(values) {
     values["userId"] = userId;
-    const resp = await fetch("http://localhost:8000/api/events/add", {
+    const resp = await fetch("https://event-management-platform-backend-moar.onrender.com/api/events/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -8,9 +8,12 @@ import {
 import { PlusCircle } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import useStore from "@/store/userStore";
 
 const Options = ({ userType, filters, updateFilters }) => {
   const { category, month, time } = filters;
+
+  const { deleteUser } = useStore();
 
   const handleFilterChange = (e, filterType) => {
     const updatedFilters = { ...filters };
@@ -88,7 +91,9 @@ const Options = ({ userType, filters, updateFilters }) => {
               Create Event <PlusCircle />
             </Link>
           </Button>
-          <Button variant="destructive">Logout</Button>
+          <Button variant="destructive" onClick={deleteUser}>
+            Logout
+          </Button>
         </div>
       )}
     </div>

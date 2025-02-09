@@ -16,7 +16,7 @@ import Link from "next/link";
 import { io } from "socket.io-client";
 import _ from "lodash";
 
-const socket = io("http://localhost:8000");
+const socket = io("https://event-management-platform-backend-moar.onrender.com/");
 
 const EventCard = ({ item, refetch }) => {
   const { userId } = useStore();
@@ -48,7 +48,7 @@ const EventCard = ({ item, refetch }) => {
 
   const handleDelete = async (id, postUserId) => {
     const data = { userId: userId, postUserId: postUserId };
-    const resp = await fetch(`http://localhost:8000/api/events/delete/${id}`, {
+    const resp = await fetch(`https://event-management-platform-backend-moar.onrender.com/api/events/delete/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
