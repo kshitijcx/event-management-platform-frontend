@@ -64,7 +64,6 @@ const CreateEvent = ({ userId }) => {
     if (!resp.ok) {
       console.log(resp);
     } else {
-      console.log(values);
       router.push("/");
     }
   }

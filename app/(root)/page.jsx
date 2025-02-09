@@ -55,7 +55,6 @@ const page = () => {
     if (filters.category) {
       matchesCategory =
         event.category.toLowerCase() === filters.category.toLowerCase();
-        console.log(event.category.toLowerCase(),filters.category.toLowerCase())
     }
 
     // Filter by month
@@ -64,7 +63,6 @@ const page = () => {
         month: "long",
       });
       matchesMonth = eventMonth.toLowerCase() === filters.month.toLowerCase();
-      console.log(eventMonth.toLowerCase(), filters.month.toLowerCase())
     }
 
     // Filter by upcoming or past

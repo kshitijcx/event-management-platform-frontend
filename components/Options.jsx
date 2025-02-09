@@ -19,7 +19,10 @@ const Options = ({ userType, filters, updateFilters }) => {
     const updatedFilters = { ...filters };
     updatedFilters[filterType] = e;
     updateFilters(updatedFilters);
-    console.log(e);
+  };
+
+  const handleClearFilter = () => {
+    updateFilters({});
   };
 
   const months = [
@@ -82,6 +85,9 @@ const Options = ({ userType, filters, updateFilters }) => {
             ))}
           </SelectContent>
         </Select>
+        <Button variant="outline" size="sm" onClick={handleClearFilter}>
+          Clear Filters
+        </Button>
       </div>
 
       {userType !== "guest" && (

@@ -24,7 +24,6 @@ const Edit = ({ params }) => {
     queryFn: () => fetchEvent(id),
     enabled: !!userToken,
   });
-  console.log(data)
 
   useEffect(() => {
     const getUserToken = () => {
