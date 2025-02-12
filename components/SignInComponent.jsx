@@ -16,6 +16,8 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import useStore from "@/store/userStore";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -33,17 +35,23 @@ const SignInComponent = () => {
 
   const { setUser } = useStore();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   async function onSubmit(values) {
-    const resp = await fetch("https://event-management-platform-backend-moar.onrender.com/api/users/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    });
+    setLoading(true);
+    const resp = await fetch(
+      "https://event-management-platform-backend-moar.onrender.com/api/users/signin",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }
+    );
     const data = await resp.json();
     setUser(data.id, data.token, data.name);
+    setLoading(false);
     router.push("/");
   }
 
@@ -91,7 +99,7 @@ const SignInComponent = () => {
               Sign Up
             </Link>
           </p>
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Submit {loading && (<Loader2 className="animate-spin"/>)}</Button>
         </form>
       </Form>
     </div>
